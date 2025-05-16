@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { PokedexContext } from '../context/PokedexContext';
 import { PokedexEntry } from '../types/Pokedex';
+import '../styles/Dashboard.css';
 
 const Dashboard: React.FC = () => {
     const { currentUser, logout } = useContext(UserContext);
@@ -16,32 +17,52 @@ const Dashboard: React.FC = () => {
 
     const handleLogout = () => {
         logout();
-        //clear cache
         localStorage.removeItem('currentUser');
         navigate('/');
     };
 
     return (
-        <div>
-            <h2>Dashboard</h2>
+        <div className="dashboard-container">
+            <div className="dashboard-header">
+                <h2>Dashboard</h2>
+                <button className="logout-btn" onClick={handleLogout}>Déconnexion</button>
+            </div>
             <p>Bienvenue, {currentUser.username} !</p>
-            <button onClick={handleLogout}>Déconnexion</button>
 
             <h3>Mon Pokédex</h3>
             {entries.length > 0 ? (
-                <ul style={{ listStyle: 'none', padding: 0 }}>
-                    {entries.map((entry: PokedexEntry, index: number) => (
-                        <li key={index} style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '1rem', marginBottom: '1rem' }}>
-                            <img src={entry.isShiny ? entry.sprites.shiny : entry.sprites.regular} alt={entry.name} width={96} height={96} />
-                            <h4>{entry.name} {entry.isShiny && <span style={{ color: 'gold' }}>✨</span>}</h4>
-                            <p>Type(s): {entry.types.map(t => (
-                                <img key={t.name} src={t.image} alt={t.name} style={{ width: '24px', verticalAlign: 'middle', marginRight: '4px' }} />
-                            ))}</p>
-                            <p>Niveau: {entry.level}</p>
-                            <p>Capturé le: {new Date(entry.caughtAt).toLocaleDateString()}</p>
-                        </li>
+                <div className="pokedex-grid">
+                    {entries.map((entry: PokedexEntry) => (
+                        <div
+                            key={entry.pokedex_id}
+                            className="pokedex-card"
+                            onClick={() => navigate(`/pokemon/${entry.name.toLowerCase()}`)}
+                        >
+                            <img
+                                src={entry.isShiny ? entry.sprites.shiny : entry.sprites.regular}
+                                alt={entry.name}
+                                className="pokemon-image"
+                            />
+                            <div className="pokemon-name">
+                                {entry.name}
+                                {entry.isShiny && <span className="shiny-star">✨</span>}
+                            </div>
+                            <div className="pokemon-type">
+                                {entry.types.map(t => (
+                                    <img
+                                        key={t.name}
+                                        src={t.image}
+                                        alt={t.name}
+                                        className="type-icon"
+                                    />
+                                ))}
+                            </div>
+                            <div style={{ fontSize: "0.8rem", color: "#666" }}>
+                                Niveau: {entry.level}
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             ) : (
                 <p>Tu n'as pas encore capturé de Pokémon.</p>
             )}

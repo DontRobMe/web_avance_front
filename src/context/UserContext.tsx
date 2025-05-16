@@ -3,6 +3,7 @@ import { SignupData, User } from '../types/User';
 
 interface UserContextProps {
     users: User[];
+    setUsers: React.Dispatch<React.SetStateAction<User[]>>; // 👈 ajoute ceci
     currentUser: User | null;
     setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
     login: (username: string, password: string) => boolean;
@@ -10,9 +11,11 @@ interface UserContextProps {
     signup: (data: SignupData) => boolean;
 }
 
+
 export const UserContext = createContext<UserContextProps>({
     users: [],
     currentUser: null,
+    setUsers: () => {},
     setCurrentUser: () => {},
     login: () => false,
     logout: () => {},
@@ -106,7 +109,7 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
 
 
     return (
-        <UserContext.Provider value={{ users, currentUser, login, logout, signup, setCurrentUser }}>
+        <UserContext.Provider value={{ users, setUsers, currentUser, login, logout, signup, setCurrentUser }}>
             {children}
         </UserContext.Provider>
     );

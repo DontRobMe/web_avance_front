@@ -53,5 +53,5 @@ export interface Pokemon {
     };
     catch_rate: number;
     level_100: number;
-    formes: null; // Inclus dans le JSON, donc on le garde
+    formes: null;
 }

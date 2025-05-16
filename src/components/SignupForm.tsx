@@ -1,9 +1,11 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
+import React, {useState, useContext} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {UserContext} from '../context/UserContext';
+import '../styles/SignupForm.css';
+
 
 const SignupForm: React.FC = () => {
-    const { signup } = useContext(UserContext);
+    const {signup} = useContext(UserContext);
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -15,7 +17,7 @@ const SignupForm: React.FC = () => {
     const [error, setError] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({...form, [e.target.name]: e.target.value});
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -30,36 +32,45 @@ const SignupForm: React.FC = () => {
     };
 
     return (
-        <div>
+        <div className="signup-container">
             <h2>Créer un compte</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="Nom d’utilisateur"
-                    value={form.username}
-                    onChange={handleChange}
-                    required
-                />
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Mot de passe"
-                    value={form.password}
-                    onChange={handleChange}
-                    required
-                />
+            <form className="signup-form" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="username">Nom d’utilisateur :</label>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Nom d’utilisateur"
+                        value={form.username}
+                        onChange={handleChange}
+                        required
+                    />
+                    <label htmlFor="username">Mail :</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={handleChange}
+                        required
+                    />
+                    <label htmlFor="username">Password :</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Mot de passe"
+                        value={form.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
                 <button type="submit">S’inscrire</button>
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
+
+            <p>
+                Vous avez déjà un compte ? <Link to="/login">Se connecter</Link>
+            </p>
         </div>
     );
 };
