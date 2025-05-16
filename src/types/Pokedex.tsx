@@ -1,6 +1,6 @@
 export interface PokedexEntry {
     pokedex_id: number;
-    caughtAt: Date;
+    caughtAt: number;
     name: string;
     isShiny: boolean;
     level: number;

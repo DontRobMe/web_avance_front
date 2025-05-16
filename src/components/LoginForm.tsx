@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
+import '../styles/LoginForm.css';
+
 
 const LoginForm: React.FC = () => {
     const [username, setUsername] = useState<string>('');
@@ -21,10 +23,10 @@ const LoginForm: React.FC = () => {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: 'auto', padding: '1rem' }}>
-            <h2>Connexion</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '1rem' }}>
+        <div className="login-container">
+            <h2 className="login-title">Connexion</h2>
+            <form className="login-form" onSubmit={handleSubmit}>
+                <div className="form-group">
                     <label htmlFor="username">Nom d’utilisateur :</label>
                     <input
                         type="text"
@@ -34,8 +36,7 @@ const LoginForm: React.FC = () => {
                         required
                     />
                 </div>
-
-                <div style={{ marginBottom: '1rem' }}>
+                <div className="form-group">
                     <label htmlFor="password">Mot de passe :</label>
                     <input
                         type="password"
@@ -45,10 +46,13 @@ const LoginForm: React.FC = () => {
                         required
                     />
                 </div>
-
-                <button type="submit">Se connecter</button>
+                <button type="submit" className="login-button">Se connecter</button>
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
+
+            <p>
+                Pas encore de compte ? <Link to="/signup">S'inscrire</Link>
+            </p>
         </div>
     );
 };
