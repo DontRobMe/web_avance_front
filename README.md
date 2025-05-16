@@ -1,56 +1,164 @@
-# React + TypeScript + Vite
+# web_avance_front
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bienvenue sur le projet **web_avance_front** !  
+Ce projet est une application front-end moderne basée sur **React**, **TypeScript** et **Vite**.  
+Il sert de socle pour des développements web avancés, avec une structure claire, des outils de qualité et une expérience développeur optimale.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Fonctionnalités principales
 
-## Expanding the ESLint configuration
+- **Développement rapide** grâce à [Vite](https://vitejs.dev/)
+- **Hot Module Replacement** (HMR) pour un rechargement instantané des modifications
+- **Typage statique** avec [TypeScript](https://www.typescriptlang.org/)
+- **Qualité de code** assurée par [ESLint](https://eslint.org/) et une configuration adaptée à React/TS
+- **Structure modulaire** : composants, pages, hooks, services, etc.
+- **Support JSX/TSX** pour le développement React moderne
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🛠️ Installation
+
+### Prérequis
+
+- [Node.js](https://nodejs.org/) (version recommandée : >=18)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
+
+### Étapes
+
+1. **Cloner le dépôt**
+
+   ```bash
+   git clone <url-du-repo>
+   cd web_avance_front
+   ```
+
+2. **Installer les dépendances**
+
+   ```bash
+   npm install
+   # ou
+   yarn install
+   ```
+
+---
+
+## 👨‍💻 Lancement du projet
+
+### En mode développement
+
+```bash
+npm run dev
+# ou
+yarn dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- L'application sera accessible sur [http://localhost:5173](http://localhost:5173) (par défaut).
+- Toute modification du code source est automatiquement prise en compte grâce au HMR.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Build pour la production
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+npm run build
+# ou
+yarn build
 ```
 
-Gourbal. F
+- Le résultat sera dans le dossier `dist/`.
+
+### Prévisualisation de la build
+
+```bash
+npm run preview
+# ou
+yarn preview
+```
+
+---
+
+## 📂 Structure du projet
+
+```
+web_avance_front/
+├── public/           # Fichiers statiques (favicon, images, etc.)
+├── src/              # Code source principal
+│   ├── components/   # Composants réutilisables React
+│   ├── pages/        # Pages principales de l'application
+│   ├── hooks/        # Hooks personnalisés
+│   ├── services/     # Appels API, gestion des données
+│   ├── assets/       # Images, styles, etc.
+│   ├── App.tsx       # Point d'entrée principal React
+│   └── main.tsx      # Bootstrap de l'application
+├── package.json      # Dépendances et scripts
+├── tsconfig.json     # Configuration TypeScript
+├── vite.config.ts    # Configuration Vite
+└── README.md         # Ce fichier
+```
+
+---
+
+## 📜 Scripts disponibles
+
+- `dev` : démarre le serveur de développement
+- `build` : construit l'application pour la production
+- `preview` : prévisualise la build de production
+- `lint` : lance ESLint pour vérifier la qualité du code
+
+---
+
+## 🧹 Qualité de code & ESLint
+
+Le projet utilise ESLint avec une configuration adaptée à React et TypeScript.  
+Pour vérifier la qualité du code :
+
+```bash
+npm run lint
+# ou
+yarn lint
+```
+
+Vous pouvez personnaliser les règles dans le fichier de configuration ESLint selon vos besoins.
+
+---
+
+## 🧑‍💻 Conseils de développement
+
+- **Créer des composants réutilisables** dans `src/components`
+- **Organiser les pages** dans `src/pages`
+- **Utiliser des hooks personnalisés** pour factoriser la logique réutilisable
+- **Séparer la logique métier** (API, gestion de données) dans `src/services`
+- **Documenter votre code** pour faciliter la maintenance
+
+---
+
+## 🛠️ Technologies utilisées
+
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
+- [ESLint](https://eslint.org/)
+
+---
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues !  
+Merci de créer une issue ou une pull request pour toute suggestion, correction ou amélioration.
+
+---
+
+## 📄 Licence
+
+Ce projet est sous licence MIT.
+
+---
+
+## 📬 Besoin d'aide ?
+
+Pour toute question, contactez le responsable du projet ou ouvrez une issue sur le dépôt.
+
+---
+
+## 👤 Créateur
+
+GOURBAL François
