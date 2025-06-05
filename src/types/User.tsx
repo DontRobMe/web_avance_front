@@ -1,7 +1,7 @@
 import {PokedexEntry} from "./Pokedex.tsx";
 
 export interface User {
-    id: number;
+    id: string;
     username: string;
     email: string;
     password: string;
@@ -10,12 +10,18 @@ export interface User {
     wins: number;
     losses: number;
     pokedex: PokedexEntry[];
-    lastGachaDate: Date;
+    lastGachaDate: string | null
 }
 
+export default User;
 
 export interface SignupData {
     username: string;
     email: string;
     password: string;
+}
+
+export interface SimplifiedUser {
+    id: number;
+    username: string;
 }

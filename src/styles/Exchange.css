@@ -1,0 +1,159 @@
+body {
+    font-family: 'Arial', sans-serif;
+}
+
+.trade-component,
+.gallery-page {
+    padding: 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.user-selector ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin-bottom: 1rem;
+    list-style: none;
+}
+
+.user-selector button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid #444;
+    background-color: #fff;
+    color: #333;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.user-selector button:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.user-selector button.selected {
+    background-color: #444;
+    color: #fff;
+}
+
+.pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+    justify-items: center;
+}
+
+.pokemon-grid.small {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.card {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.4rem;
+    text-align: center;
+    cursor: pointer;
+    width: 65px;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+    border-color: #1976d2;
+}
+
+.card.selected {
+    border-color: #1976d2;
+    background-color: #e3f2fd;
+    transform: scale(1.05);
+}
+
+.pokemon-card.disabled,
+.card.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(70%);
+}
+
+
+.card img,
+.pokemon-grid img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+button,
+.action-button {
+    margin-top: 1rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+button:hover:not(:disabled),
+.action-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+button:disabled,
+.action-button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+.counter-section button {
+    margin-top: 0.5rem;
+    background-color: #1976d2;
+}
+
+.counter-section button:disabled {
+    background-color: #b0bec5;
+}
+
+
+.counter-section {
+    margin-top: 2rem;
+}
+
+.counter-section h3 {
+    margin-bottom: 1rem;
+}
+
+.trade-request {
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fafafa;
+    font-size: 0.9rem;
+}
+
+.loading,
+.error-message {
+    margin: 1rem 0;
+    font-weight: bold;
+    color: #c00;
+    text-align: center;
+}

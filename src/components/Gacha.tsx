@@ -1,27 +1,30 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { PokedexContext } from '../context/PokedexContext';
-import { UserContext } from '../context/UserContext';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCurrentUser, setCurrentUser } from '../store/slice/UserSlice';
+import {addPokemon, savePokemonToLocalPokedex, selectPokedexEntries} from '../store/slice/PokedexSlice';
 import { PokedexEntry } from '../types/Pokedex';
 import { Pokemon } from '../types/Pokemon';
+import '../styles/GachaComponent.css';
+import User from "../types/User.tsx";
 
 const GachaComponent: React.FC = () => {
-    const { addEntry, entries } = useContext(PokedexContext);
-    const { currentUser, setCurrentUser } = useContext(UserContext);
+    const dispatch = useDispatch();
+    const currentUser = useSelector(selectCurrentUser);
+    const entries = useSelector(selectPokedexEntries);
     const [loading, setLoading] = useState(false);
     const [capturedPokemon, setCapturedPokemon] = useState<PokedexEntry | null>(null);
     const [canGacha, setCanGacha] = useState(true);
 
     useEffect(() => {
-        if (currentUser) {
-            const today = new Date();
-            const lastGachaDate = new Date(currentUser.lastGachaDate);
+        if (!currentUser?.lastGachaDate) return;
 
-            today.setHours(0, 0, 0, 0);
-            lastGachaDate.setHours(0, 0, 0, 0);
+        const today = new Date();
+        const lastGacha = new Date(currentUser.lastGachaDate);
 
-            const isSameDay = today.getTime() === lastGachaDate.getTime();
-            setCanGacha(!isSameDay);
-        }
+        today.setHours(0, 0, 0, 0);
+        lastGacha.setHours(0, 0, 0, 0);
+
+        setCanGacha(today.getTime() !== lastGacha.getTime());
     }, [currentUser]);
 
     const pokemonToPokedexEntry = (pokemon: Pokemon): PokedexEntry => ({
@@ -47,72 +50,70 @@ const GachaComponent: React.FC = () => {
     });
 
     const handleGacha = async () => {
-        if (!currentUser) {
-            console.log("Aucun utilisateur connecté.");
-            return;
-        }
+        if (!currentUser || !canGacha) return;
 
-        console.log("Lancement gacha...");
         setLoading(true);
-
         try {
-            const response = await fetch('https://tyradex.vercel.app/api/v1/pokemon');
-            const data: Pokemon[] = await response.json();
+            const res = await fetch('https://tyradex.vercel.app/api/v1/pokemon');
+            const data: Pokemon[] = await res.json();
 
             const randomIndex = Math.floor(Math.random() * data.length);
             const randomPokemon = data[randomIndex];
-            console.log(randomPokemon);
 
-            const isPokemonAlreadyCaptured = entries.some(entry => entry.pokedex_id === randomPokemon.pokedex_id);
-
-            if (isPokemonAlreadyCaptured) {
-                console.log("Ce Pokémon est déjà dans ton Pokédex !");
+            if (entries.some(e => e.pokedex_id === randomPokemon.pokedex_id)) {
+                console.log("Déjà capturé.");
                 setLoading(false);
                 return;
             }
 
             const entry = pokemonToPokedexEntry(randomPokemon);
-            addEntry(entry);
+
+            dispatch(addPokemon(entry));
             setCapturedPokemon(entry);
 
-            const today = new Date();
-            const updatedUser = { ...currentUser, lastGachaDate: today };
+            savePokemonToLocalPokedex(currentUser.id, entry);
 
-            setCurrentUser(updatedUser);
-            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+            const updatedUser = {
+                ...currentUser,
+                lastGachaDate: new Date().toISOString(),
+            };
+
+            dispatch(setCurrentUser(updatedUser));
+
+            const users: User[] = JSON.parse(localStorage.getItem('users') || '[]');
+            const updatedUsers = users.map((u: User) =>
+                u.id === (updatedUser.id) ? updatedUser : u
+            );
+
+            localStorage.setItem('users', JSON.stringify(updatedUsers));
 
         } catch (error) {
-            console.error("Erreur lors du tirage :", error);
+            console.error("Erreur gacha :", error);
         }
 
         setLoading(false);
     };
 
-
     return (
-        <div>
+        <div className="gacha-container">
             <button onClick={handleGacha} disabled={loading || !canGacha}>
-                {loading ? "Tirage en cours..." : canGacha ? "Tirer un Pokémon" : "Tu as déjà tiré aujourd'hui"}
+                {loading ? "Tirage en cours..." : canGacha ? "Tirer un Pokémon" : "Déjà tiré aujourd'hui"}
             </button>
 
             {capturedPokemon && (
-                <div>
+                <div className="captured-pokemon">
                     <h3>Félicitations !</h3>
                     <p>Tu as capturé un Pokémon !</p>
+                    <img
+                        src={capturedPokemon.isShiny ? capturedPokemon.sprites.shiny : capturedPokemon.sprites.regular}
+                        alt={capturedPokemon.name}
+                    />
                     <p>Nom : {capturedPokemon.name}</p>
                     <p>Shiny : {capturedPokemon.isShiny ? "Oui" : "Non"}</p>
                     <p>Niveau : {capturedPokemon.level}</p>
                     <p>Catégorie : {capturedPokemon.category}</p>
                     <p>Type : <img src={capturedPokemon.types[0].image} alt={capturedPokemon.types[0].name} /></p>
-                    <p>Statistiques :</p>
-                    <ul>
-                        <li>HP: {capturedPokemon.stats.hp}</li>
-                        <li>Attaque: {capturedPokemon.stats.atk}</li>
-                        <li>Défense: {capturedPokemon.stats.def}</li>
-                        <li>Vitesse: {capturedPokemon.stats.vit}</li>
-                    </ul>
-                    <p>Height: {capturedPokemon.height}</p>
-                    <p>Weight: {capturedPokemon.weight}</p>
                 </div>
             )}
         </div>

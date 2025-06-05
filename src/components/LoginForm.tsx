@@ -1,19 +1,35 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
+// LoginForm.tsx
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import { setCurrentUser } from '../store/slice/UserSlice';
+import '../styles/LoginForm.css';
+import User from "../types/User.tsx";
 
 const LoginForm: React.FC = () => {
-    const [username, setUsername] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
-    const [error, setError] = useState<string>('');
-    const { login } = useContext(UserContext);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        const isLoggedIn = login(username, password);
+        const usersStr = localStorage.getItem('users');
+        if (!usersStr) {
+            setError('Aucun utilisateur enregistré.');
+            return;
+        }
 
-        if (isLoggedIn) {
+        const users: User[] = JSON.parse(usersStr);
+        const foundUser = users.find(
+            (u: User) => u.username.toLowerCase() === username.toLowerCase() && u.password === password
+        );
+
+
+        if (foundUser) {
+            localStorage.setItem('user', JSON.stringify(foundUser));
+            dispatch(setCurrentUser(foundUser as User));
             navigate('/dashboard');
         } else {
             setError('Identifiants incorrects. Veuillez réessayer.');
@@ -21,10 +37,10 @@ const LoginForm: React.FC = () => {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: 'auto', padding: '1rem' }}>
-            <h2>Connexion</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '1rem' }}>
+        <div className="login-container">
+            <h2 className="login-title">Connexion</h2>
+            <form className="login-form" onSubmit={handleSubmit}>
+                <div className="form-group">
                     <label htmlFor="username">Nom d’utilisateur :</label>
                     <input
                         type="text"
@@ -34,8 +50,7 @@ const LoginForm: React.FC = () => {
                         required
                     />
                 </div>
-
-                <div style={{ marginBottom: '1rem' }}>
+                <div className="form-group">
                     <label htmlFor="password">Mot de passe :</label>
                     <input
                         type="password"
@@ -45,10 +60,13 @@ const LoginForm: React.FC = () => {
                         required
                     />
                 </div>
-
-                <button type="submit">Se connecter</button>
+                <button type="submit" className="login-button">Se connecter</button>
             </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="error-message">{error}</p>}
+
+            <p>
+                Pas encore de compte ? <Link to="/signup">S'inscrire</Link>
+            </p>
         </div>
     );
 };
